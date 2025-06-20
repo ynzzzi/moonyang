@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공예품 레이아웃</title>
+    <style>
+        @font-face {
+            font-family: 'SUIT-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_suit@1.0/SUIT-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Chosunilbo_myungjo';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/Chosunilbo_myungjo.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'SUIT-Regular';
+            overflow-x: hidden;
+            color: #FCFCF7;
+        }
+
+        #main {
+            background-image: url('자료/공예품/bgg.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            /* 이 속성 추가 */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            scroll-snap-align: start;
+        }
+
+        .page {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            background-color: #f8f8ec;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page-number-container {
+            position: absolute;
+            top: 30px;
+            left: 50px;
+            z-index: 2;
+            width: 100px;
+        }
+
+        .background-text-container {
+            position: absolute;
+            left: 50px;
+            top: 150px;
+            z-index: 1;
+            width: 900px;
+        }
+
+        /* 홈 아이콘 */
+        .home-icon {
+            position: fixed;
+            /* ✅ 고정 위치로 변경 */
+            top: 30px;
+            right: 60px;
+            z-index: 9999;
+            /* ✅ 항상 가장 위에 오도록 충분히 높게 */
+            width: 30px;
+            cursor: pointer;
+        }
+
+        /* Update your existing un-section CSS or add this */
+        .un-section {
+            display: flex;
+            justify-content: center;
+            /* Center horizontally */
+            align-items: center;
+            width: 100%;
+            padding: 60px 0;
+        }
+
+        .image-list {
+            display: flex;
+            flex-direction: column;
+            /* Vertical arrangement */
+            align-items: center;
+            /* Center the items */
+            gap: 60px;
+            /* 80px spacing between images */
+        }
+
+        .image-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 460px;
+            /* Set width to 480px as requested */
+        }
+
+        .image-item img {
+            width: 100%;
+            /* Makes the image fill the parent container width */
+            height: auto;
+            margin: 0;
+        }
+
+        .image-caption {
+            margin-top: 10px;
+            font-family: 'SUIT-Regular';
+            color: #555;
+            text-align: center;
+        }
+
+
+
+        .crafts-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+            position: relative;
+            max-width: 100%;
+            /* 변경: 화면 전체 너비로 확장 */
+            margin: 0 auto;
+            /* 가로 선을 위한 패딩 감소 */
+            padding-top: 10px;
+            /* 변경: 상단 패딩 감소 */
+            padding-bottom: 10px;
+            /* 변경: 하단 패딩 감소 */
+        }
+
+        /* 상단 가로선 */
+        .top-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* 변경: 왼쪽 끝으로 */
+            width: 100vw;
+            /* 변경: 뷰포트 전체 너비 */
+            height: 1px;
+            background-color: #ccc;
+        }
+
+        /* 하단 가로선 - 두 줄 */
+        .bottom-line-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            /* 변경: 왼쪽 끝으로 */
+            width: 100vw;
+            /* 변경: 뷰포트 전체 너비 */
+        }
+
+        .bottom-line-1 {
+            width: 100%;
+            height: 1px;
+            background-color: #ccc;
+            margin-bottom: 40px;
+        }
+
+        .bottom-line-2 {
+            width: 100%;
+            height: 1px;
+            background-color: #ccc;
+        }
+
+        .crafts-container {
+            display: flex;
+            width: 90%;
+            height: 80%;
+            /* 수정: 높이를 줄여서 다른 요소와 겹치지 않게 함 */
+            position: relative;
+        }
+
+        .image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .craft-image {
+            max-width: 60%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .divider {
+            width: 1px;
+            background-color: #ccc;
+            height: 90%;
+            /* 수정: 세로선 높이를 줄임 */
+            align-self: center;
+            /* 수정: 중앙에 배치 */
+        }
+
+        .text-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 20px 40px;
+            text-align: center;
+            /* 텍스트 중앙 정렬 추가 */
+        }
+
+        .craft-title {
+            font-family: 'Chosunilbo_myungjo';
+            color: #121212;
+            font-size: 24px;
+            margin-bottom: 30px;
+            font-weight: 500;
+            text-align: center;
+            /* 타이틀 중앙 정렬 추가 */
+        }
+
+        .craft-description {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            text-align: center;
+            /* 설명 중앙 정렬 추가 */
+        }
+
+        .more-button {
+            align-self: center;
+            /* 버튼 중앙 정렬로 변경 */
+            padding: 8px 20px;
+            background-color: transparent;
+            border: 1px solid #555;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'SUIT-Regular', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .more-button:hover {
+            background-color: #555;
+            color: #FCFCF7;
+        }
+
+        .navigation-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            z-index: 5;
+            /* 추가: 화살표를 상단에 표시 */
+        }
+
+        .prev-arrow {
+            left: 20px;
+            /* 변경: 좌측 여백 증가 */
+        }
+
+        .next-arrow {
+            right: 20px;
+            /* 변경: 우측 여백 증가 */
+        }
+
+        .craft-item {
+            display: none;
+            width: 100%;
+        }
+
+        .craft-item.active {
+            display: flex;
+        }
+
+        .arrow-icon {
+            width: 24px;
+            height: 24px;
+            stroke: #555;
+            transition: stroke 0.3s ease;
+        }
+
+        .navigation-arrow:hover .arrow-icon {
+            stroke: #7d7d7d;
+        }
+
+        .about-image-container3 {
+            display: flex;
+            justify-content: center;
+            /* 중앙 정렬 */
+            align-items: center;
+            width: 100%;
+            padding: 60px 0;
+        }
+
+        .about-image-container3 img {
+            width: 50vw;
+            /* 화면 너비의 90%로 크게 보이게 */
+            max-width: 800px;
+            /* 최대 너비 제한 (원하는 만큼 조정 가능) */
+            height: auto;
+        }
+
+        .tile-grid {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            /* 필요에 따라 높이 조정 */
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tile-collection {
+            display: none;
+            /* 기본적으로 모든 타일 컬렉션 숨김 */
+        }
+
+        .tile-collection.active {
+            display: block;
+            /* 활성화된 컬렉션만 표시 */
+        }
+
+        .tile-item {
+            position: absolute;
+            /* 절대 위치로 변경 */
+            transition: transform 0.3s ease;
+            z-index: 1;
+            /* 기본 z-index */
+        }
+
+        .tile-item:hover {
+            transform: scale(1.05);
+            z-index: 10;
+            /* 호버 시 앞으로 나오게 */
+        }
+
+        .tile-item img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        /* 백자 타일 레이아웃 */
+        .tile-collection[data-craft="baekja"] .tile-item:nth-child(1) {
+            width: 290px;
+            top: 5%;
+            left: 12%;
+        }
+
+        .tile-collection[data-craft="baekja"] .tile-item:nth-child(2) {
+            width: 320px;
+            top: -3%;
+            left: 36%;
+            z-index: 2;
+        }
+
+        .tile-collection[data-craft="baekja"] .tile-item:nth-child(3) {
+            width: 170px;
+            top: 13%;
+            left: 67%;
+            z-index: 2;
+        }
+
+        .tile-collection[data-craft="baekja"] .tile-item:nth-child(4) {
+            width: 190px;
+            top: 38%;
+            left: 42%;
+            z-index: 2;
+        }
+
+        .tile-collection[data-craft="baekja"] .tile-item:nth-child(5) {
+            width: 230px;
+            top: 77%;
+            left: 26%;
+            z-index: 3;
+        }
+
+        .tile-collection[data-craft="baekja"] .tile-item:nth-child(6) {
+            width: 250px;
+            top: 65%;
+            left: 60%;
+            z-index: 3;
+        }
+
+        .tile-collection[data-craft="baekja"] .tile-item:nth-child(7) {
+            width: 80px;
+            top: 0%;
+            left: 78%;
+            z-index: 3;
+        }
+
+        /* 청자 타일 레이아웃 - 다른 배치 */
+        .tile-collection[data-craft="cheongja"] .tile-item:nth-child(1) {
+            width: 200px;
+            top: 15%;
+            left: 18%;
+        }
+
+        .tile-collection[data-craft="cheongja"] .tile-item:nth-child(2) {
+            width: 250px;
+            top: -3%;
+            left: 40%;
+            z-index: 2;
+        }
+
+        .tile-collection[data-craft="cheongja"] .tile-item:nth-child(3) {
+            width: 205px;
+            top: 8%;
+            left: 67%;
+            z-index: 2;
+        }
+
+        .tile-collection[data-craft="cheongja"] .tile-item:nth-child(4) {
+            width: 260px;
+            top: 82%;
+            left: 22%;
+            z-index: 2;
+        }
+
+        .tile-collection[data-craft="cheongja"] .tile-item:nth-child(5) {
+            width: 190px;
+            top: 63%;
+            left: 63%;
+            z-index: 3;
+        }
+
+        .tile-collection[data-craft="cheongja"] .tile-item:nth-child(6) {
+            width: 80px;
+            top: 95%;
+            left: 50%;
+            z-index: 3;
+        }
+
+        /* 나전칠기 타일 레이아웃 - 또 다른 배치 */
+        .tile-collection[data-craft="najeon"] .tile-item:nth-child(1) {
+            width: 220px;
+            top: 0%;
+            left: 15%;
+        }
+
+        .tile-collection[data-craft="najeon"] .tile-item:nth-child(2) {
+            width: 270px;
+            top: 20%;
+            left: 40%;
+            z-index: 2;
+        }
+
+        .tile-collection[data-craft="najeon"] .tile-item:nth-child(3) {
+            width: 205px;
+            top: 30%;
+            left: 70%;
+            z-index: 2;
+        }
+
+        .tile-collection[data-craft="najeon"] .tile-item:nth-child(4) {
+            width: 290px;
+            top: 58%;
+            left: 20%;
+            z-index: 2;
+        }
+
+        .tile-collection[data-craft="najeon"] .tile-item:nth-child(5) {
+            width: 280px;
+            top: 75%;
+            left: 50%;
+            z-index: 3;
+        }
+
+        .tile-collection[data-craft="najeon"] .tile-item:nth-child(6) {
+            width: 80px;
+            top: 5%;
+            left: 75%;
+            z-index: 3;
+        }
+
+        /* 반응형 조정 */
+        @media (max-width: 900px) {
+            .tile-grid {
+                height: 800px;
+            }
+
+            /* 모바일 화면에서는 공통 위치 적용 */
+            .tile-collection .tile-item:nth-child(1) {
+                top: 0;
+                left: 5%;
+            }
+
+            .tile-collection .tile-item:nth-child(2) {
+                top: 15%;
+                left: 25%;
+            }
+
+            .tile-collection .tile-item:nth-child(3) {
+                top: 35%;
+                left: 10%;
+            }
+
+            .tile-collection .tile-item:nth-child(4) {
+                top: 55%;
+                left: 20%;
+            }
+
+            .tile-collection .tile-item:nth-child(5) {
+                top: 70%;
+                left: 5%;
+            }
+
+            .tile-collection .tile-item:nth-child(6) {
+                top: 85%;
+                left: 15%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .tile-grid {
+                height: 1000px;
+            }
+
+            .tile-item {
+                width: 70% !important;
+                /* 모든 항목의 너비를 동일하게 */
+            }
+
+            /* 더 작은 화면에서 세로로 배치 */
+            .tile-collection .tile-item:nth-child(1) {
+                top: 0;
+                left: 15%;
+            }
+
+            .tile-collection .tile-item:nth-child(2) {
+                top: 18%;
+                left: 15%;
+            }
+
+            .tile-collection .tile-item:nth-child(3) {
+                top: 36%;
+                left: 15%;
+            }
+
+            .tile-collection .tile-item:nth-child(4) {
+                top: 54%;
+                left: 15%;
+            }
+
+            .tile-collection .tile-item:nth-child(5) {
+                top: 72%;
+                left: 15%;
+            }
+
+            .tile-collection .tile-item:nth-child(6) {
+                top: 90%;
+                left: 15%;
+            }
+        }
+
+        /* 스크롤 애니메이션 관련 스타일 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .fade-in.appear {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger {
+            transition-delay: calc(var(--order) * 200ms);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- 메인 페이지 -->
+        <div id="main" class="section page">
+            <!-- 홈 아이콘 -->
+            <a href="index.html" class="home-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#6d6d6d"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <br>
+
+    <!-- Modify the un-section part in your HTML -->
+    <div class="un-section">
+        <div class="image-list">
+            <div class="image-item">
+                <img src="자료/공예품/group1.png" alt="백자" class="fade-in">
+            </div>
+            <div class="image-item">
+                <img src="자료/공예품/group2.png" alt="나전칠기" class="fade-in">
+            </div>
+            <div class="image-item">
+                <img src="자료/공예품/group3.png" alt="청자" class="fade-in">
+            </div>
+        </div>
+    </div>
+
+    <br><br>
+
+    <section class="crafts-section">
+        <!-- 상단 가로선 추가 -->
+        <div class="top-line"></div>
+
+        <button class="navigation-arrow prev-arrow" onclick="navigateCrafts(-1)">
+            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+
+        <div class="crafts-container">
+            <!-- 백자 (White Porcelain) -->
+            <div class="craft-item active" data-craft="baekja">
+                <div class="image-container">
+                    <img src="자료/공예품/b.png" alt="백자" class="craft-image">
+                </div>
+                <div class="divider"></div>
+                <div class="text-container">
+                    <h2 class="craft-title">백자<br>(白瓷•白磁)</h2>
+                    <p class="craft-description">
+                        백자(白瓷白磁)는 조선 14세기 초 중국에서부터 전래되었고,<br>
+                        자기나라에서도 조선 성리학자들의 16~19세기까지 원용되어<br>
+                        발전한 도자기입니다.<br><br>
+                        순수하고 깨끗한 표면을 단순한 일자로 그리고<br>
+                        그 위에 유약(유리질)을 바른 투명한 표면처리에서 그리는 도자기를 말합니다.
+                    </p>
+                    <button class="more-button">살펴보기</button>
+                </div>
+            </div>
+            <br><br><br><br><br>
+            <!-- 청자 (Celadon) -->
+            <div class="craft-item" data-craft="cheongja">
+                <div class="image-container">
+                    <img src="자료/공예품/ch.png" alt="청자" class="craft-image">
+                </div>
+                <div class="divider"></div>
+                <div class="text-container">
+                    <h2 class="craft-title">청자<br>(靑瓷)</h2>
+                    <p class="craft-description">
+                        청자(靑瓷)는 고려시대를 대표하는 도자기로,<br>
+                        비취색을 띠는 유약으로 완성된 아름다운 도자기입니다.<br>
+                        고려 12세기에 가장 발달했으며, 신비로운 비색(翡色)이 특징입니다.<br><br>
+                        섬세한 상감기법과 정교한 문양으로 장식되어<br>
+                        당시 고려의 예술적 수준을 보여주는 귀중한 문화유산입니다.
+                    </p>
+                    <button class="more-button">살펴보기</button>
+                </div>
+            </div>
+
+            <!-- 나전칠기 (Mother-of-pearl Inlay) -->
+            <div class="craft-item" data-craft="najeon">
+                <div class="image-container">
+                    <img src="자료/공예품/n.png" alt="나전칠기" class="craft-image">
+                </div>
+                <div class="divider"></div>
+                <div class="text-container">
+                    <h2 class="craft-title">나전칠기<br>(螺鈿漆器)</h2>
+                    <p class="craft-description">
+                        나전칠기(螺鈿漆器)는 목재 위에 옻칠을 하고<br>
+                        자개를 붙여 장식한 한국 전통 공예품입니다.<br>
+                        삼국시대부터 시작되어 고려, 조선을 거쳐 현재까지 이어져 왔습니다.<br><br>
+                        빛에 따라 오색찬란하게 변하는 자개의 아름다움과<br>
+                        옻칠의 견고함이 조화를 이루는 예술작품입니다.
+                    </p>
+                    <button class="more-button">살펴보기</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="navigation-arrow next-arrow" onclick="navigateCrafts(1)">
+            <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+
+        <!-- 하단 가로선 두 줄 추가 -->
+        <div class="bottom-line-container">
+            <div class="bottom-line-1"></div>
+            <div class="bottom-line-2"></div>
+        </div>
+    </section>
+
+    <br><br><br><br>
+
+    <div class="about-image-container3 fade-in">
+        <div class="tile-grid">
+            <!-- 백자 관련 이미지 세트 -->
+            <div class="tile-collection active" data-craft="baekja">
+                <a href="b.html#section1" class="tile-item">
+                    <img src="자료/공예품/백자/Group1.png" alt="귀면와 수막새">
+                </a>
+                <a href="b.html#section2" class="tile-item">
+                    <img src="자료/공예품/백자/Group2.png" alt="원형 수막새">
+                </a>
+                <a href="b.html#section3" class="tile-item">
+                    <img src="자료/공예품/백자/Group3.png" alt="꽃문양 수막새">
+                </a>
+                <a href="b.html#section4" class="tile-item">
+                    <img src="자료/공예품/백자/Group4.png" alt="문자 수막새">
+                </a>
+                <a href="b.html#section5" class="tile-item">
+                    <img src="자료/공예품/백자/Group5.png" alt="원형 문양 수막새">
+                </a>
+                <a href="b.html#section6" class="tile-item">
+                    <img src="자료/공예품/백자/Group6.png" alt="원형 문양 수막새">
+                </a>
+                <a href="b.html" class="tile-item">
+                    <img src="자료/공예품/more.png" alt="원형 문양 수막새">
+                </a>
+            </div>
+
+            <!-- 청자 관련 이미지 세트 -->
+            <div class="tile-collection" data-craft="cheongja">
+                <a href="test1.html?section=1" class="tile-item">
+                    <img src="자료/공예품/Group 42.png" alt="청자 수막새 1">
+                </a>
+                <a href="test1.html?section=1" class="tile-item">
+                    <img src="자료/공예품/Group 43.png" alt="청자 수막새 2">
+                </a>
+                <a href="test1.html?section=3" class="tile-item">
+                    <img src="자료/공예품/Group 44.png" alt="청자 수막새 3">
+                </a>
+                <a href="test1.html?section=2" class="tile-item">
+                    <img src="자료/공예품/Group 45.png" alt="청자 수막새 4">
+                </a>
+                <a href="test1.html?section=4" class="tile-item">
+                    <img src="자료/공예품/Group 46.png" alt="청자 수막새 5">
+                </a>
+                <a href="test1.html?section=4" class="tile-item">
+                    <img src="자료/공예품/more.png" alt="원형 문양 수막새">
+                </a>
+            </div>
+
+            <!-- 나전칠기 관련 이미지 세트 -->
+            <div class="tile-collection" data-craft="najeon">
+                <a href="test1.html?section=1" class="tile-item">
+                    <img src="자료/공예품/Group 47.png" alt="나전칠기 수막새 1">
+                </a>
+                <a href="test1.html?section=1" class="tile-item">
+                    <img src="자료/공예품/Group 48.png" alt="나전칠기 수막새 2">
+                </a>
+                <a href="test1.html?section=3" class="tile-item">
+                    <img src="자료/공예품/Group 49.png" alt="나전칠기 수막새 3">
+                </a>
+                <a href="test1.html?section=2" class="tile-item">
+                    <img src="자료/공예품/Group 50.png" alt="나전칠기 수막새 4">
+                </a>
+                <a href="test1.html?section=4" class="tile-item">
+                    <img src="자료/공예품/Group 51.png" alt="나전칠기 수막새 5">
+                </a>
+                <a href="test1.html?section=4" class="tile-item">
+                    <img src="자료/공예품/more.png" alt="원형 문양 수막새">
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // IntersectionObserver 설정
+        const appearOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -100px 0px"
+        };
+
+        // 모든 fade-in 요소 관찰 시작
+        const appearOnScroll = new IntersectionObserver(function (entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add("appear");
+                    appearOnScroll.unobserve(entry.target);
+                }
+            });
+        }, appearOptions);
+
+        // 페이지 로드 후 모든 fade-in 요소를 관찰자에 등록
+        document.addEventListener("DOMContentLoaded", function () {
+            const fadeElements = document.querySelectorAll(".fade-in");
+
+            // 각 요소에 순서에 따른 stagger 효과 추가
+            fadeElements.forEach((element, index) => {
+                element.style.setProperty('--order', index);
+                element.classList.add('stagger');
+                appearOnScroll.observe(element);
+            });
+        });
+
+        // 슬라이드 내비게이션 함수 수정
+        let currentIndex = 0;
+        const craftItems = document.querySelectorAll('.craft-item');
+        const tileCollections = document.querySelectorAll('.tile-collection');
+
+        function navigateCrafts(direction) {
+            // 현재 아이템 숨기기
+            craftItems[currentIndex].classList.remove('active');
+            tileCollections[currentIndex].classList.remove('active');
+
+            // 인덱스 업데이트
+            currentIndex = (currentIndex + direction + craftItems.length) % craftItems.length;
+
+            // 새 아이템 및 관련 타일 컬렉션 표시
+            craftItems[currentIndex].classList.add('active');
+            tileCollections[currentIndex].classList.add('active');
+        }
+
+        // more-button에 이벤트 리스너 추가
+        document.addEventListener("DOMContentLoaded", function () {
+            // 모든 more-button 요소에 클릭 이벤트 리스너 추가
+            const moreButtons = document.querySelectorAll('.more-button');
+
+            moreButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    // 부모 craft-item에서 data-craft 속성 가져오기
+                    const craftItem = this.closest('.craft-item');
+                    const craftType = craftItem.getAttribute('data-craft');
+
+                    // 해당하는 타일 컬렉션 활성화
+                    const tileCollections = document.querySelectorAll('.tile-collection');
+                    tileCollections.forEach(collection => {
+                        collection.classList.remove('active');
+                        if (collection.getAttribute('data-craft') === craftType) {
+                            collection.classList.add('active');
+                        }
+                    });
+
+                    // 타일 그리드 섹션으로 부드럽게 스크롤
+                    const tileGrid = document.querySelector('.tile-grid');
+                    tileGrid.scrollIntoView({ behavior: 'smooth' });
+
+                    // 현재 인덱스 업데이트 (슬라이드 네비게이션과 동기화)
+                    const craftItems = document.querySelectorAll('.craft-item');
+                    for (let i = 0; i < craftItems.length; i++) {
+                        if (craftItems[i].getAttribute('data-craft') === craftType) {
+                            currentIndex = i;
+                            break;
+                        }
+                    }
+                });
+            });
+
+            const fadeElements = document.querySelectorAll(".fade-in");
+
+            // 각 요소에 순서에 따른 stagger 효과 추가
+            fadeElements.forEach((element, index) => {
+                element.style.setProperty('--order', index);
+                element.classList.add('stagger');
+                appearOnScroll.observe(element);
+            });
+        });
+        window.addEventListener('scroll', function () {
+            const homeIcon = document.querySelector('.home-icon svg');
+            const mainSection = document.getElementById('main');
+
+            if (!homeIcon || !mainSection) return;
+
+            const mainBottom = mainSection.offsetTop + mainSection.offsetHeight;
+            const scrollY = window.scrollY;
+
+            if (scrollY >= mainBottom - 50) {
+                // 메인 섹션을 벗어나면 → 검은색
+                homeIcon.setAttribute('stroke', '#6D6D6D');
+            } else {
+                // 메인 섹션 안에 있으면 → 흰색
+                homeIcon.setAttribute('stroke', '#fff');
+            }
+        });
+    </script>
+</body>
+
+</html>

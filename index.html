@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>One-Page-Scroll</title>
+  <style>
+* {
+    padding: 0;
+    margin: 0;
+    color : white;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+.pages {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.page {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    bottom: -100%;
+    transition: bottom .7s;
+  
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.page:first-child {
+  bottom: 0;
+}
+
+.first {
+    background-color: #ffffff;
+}
+
+.second {
+    background-color: #ffffff;
+}
+
+.third {
+    background-color: #ffffff;
+}
+
+.fourth {
+    background-color: #ffffff;
+}
+
+.fifth {
+    background-color: rgb(10, 10, 10);
+    overflow: hidden;
+}
+
+
+.pagination {
+    position: absolute;
+    left: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.pagination>li {
+    list-style: none;
+    height: 10px;
+    width: 10px;
+    background: #B9B9B9;
+    border-radius: 50%;
+    margin-top: 10px;
+    transition: background .7s;
+}
+
+.pagination>li.active {
+    background: #3f3f3f;
+}
+
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  right: 50px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+  z-index: 9999;
+}
+
+.nav-arrow:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.nav-arrow svg {
+    width: 60px;
+    height: 60px;
+    stroke: #3f3f3f;
+    stroke-width: 2;
+    fill: none;
+}
+
+
+.title {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .nav-arrow {
+        width: 40px;
+        height: 40px;
+    }
+    .nav-arrow svg {
+        width: 30px;
+        height: 30px;
+    }
+    .image-container,
+    .third-page-layout,
+    .right-column {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+    }
+    .image2, .image3, .image4, .image5 {
+        width: 80vw;
+        position: static;
+        animation: none;
+    }
+    .himage1, .himage2, .himage3 {
+        width: 90vw;
+        position: static;
+        margin-bottom: 20px;
+    }
+    .overlay-image {
+        width: 60vw;
+        position: static;
+        transform: none;
+        opacity: 1;
+    }
+}
+
+.center-image {
+    max-width: 1000px;
+    width: 100%;
+    height: auto;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.stack-image {
+    max-width: 1600px;
+    width: 100%;
+    height: auto;
+    opacity: 0;
+    transform: translateY(-30px);
+    transition: opacity 0.7s, transform 0.7s;
+}
+
+.stack-image.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* c.png를 위한 특별한 스타일 */
+.stack-image.c-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 1.5s ease, transform 1.5s ease;  /* 더 천천히 나타나도록 */
+}
+
+.image5 {
+    transition: opacity 1.5s ease, transform 1.5s ease;
+}
+
+.image-container {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.image-container2 {
+  width: 100%;
+  max-width: 1200px; /* Increase the container width */
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Add positioning context */
+  margin: 0 auto; /* Center the container */
+  gap: 30px;
+  padding: 20px;
+}
+
+.third-page-layout {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.right-column {
+  height: 100%;
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Floating animation for dish images */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* Apply floating animation to dish images */
+.image2 {
+  position: absolute;
+  width: 400px;
+  top: 0%;
+  left: 28%;
+  z-index: 2;
+  animation: float 6s ease-in-out infinite;
+}
+
+
+.image3 {
+  position: absolute;
+  width: 480px;
+  top: 48%;
+  right: 20%;
+  z-index: 2;
+  animation: float 7s ease-in-out infinite; /* Slightly different timing */
+}
+
+.image4 {
+  position: absolute;
+  width: 500px;
+  bottom: 3%;
+  left: 20%;
+  z-index: 2;
+  animation: float 8s ease-in-out infinite; /* Another timing variation */
+}
+
+.image5 {
+  position: absolute;
+  width: 1200px; /* Fixed width instead of percentage */
+  bottom: 38%;
+  left: 8%;
+  z-index: 1; /* Lower z-index keeps it in the background */
+}
+
+
+.himage1 {
+  position: absolute;
+  width: 1200px; /* Fixed width instead of percentage */
+  top: 10%;
+}
+
+.himage2 {
+  position: absolute;
+  width: 800px; /* Fixed width instead of percentage */
+  top: 25%;
+  left: 8%;
+}
+
+.himage3 {
+  position: absolute;
+  width: 750px; /* Fixed width instead of percentage */
+  top: 45%;
+  right: 0%;
+}
+
+.aimage1 {
+  width: 1200px;
+  position: relative;
+  z-index: 1;
+}
+
+/* New overlay image style */
+.overlay-image {
+  position: absolute;
+  width: 450px;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(-30px);
+  opacity: 0;
+  z-index: 2;
+  transition: opacity 0.7s, transform 0.7s;
+}
+
+.overlay-image.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.fifth-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Gallery Styles */
+#gallery {
+  height: 120vh;
+  width: 120vw;  
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.tile {
+  border-radius: 1.5vw;
+  position: absolute;
+  transition: transform 800ms ease;
+  min-width: 80px;
+  min-height: 60px;
+}
+
+.tile:hover {
+  transform: scale(1.1);
+}
+
+.tile:hover > img {
+  opacity: 1;
+  transform: scale(1.01);
+}
+
+.tile > img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 800ms ease,
+    transform 800ms ease;
+}
+
+.tile:nth-child(1) {
+  background-color: rgb(255, 238, 88);
+  height: 12vw;
+  width: 18vw;
+  left: 8%;
+  top: 10%;
+}
+
+.tile:nth-child(2) {
+  background-color: rgb(66, 165, 245);
+  height: 20vw;
+  width: 12vw;
+  left: 38%;
+  top: 5%;
+}
+
+.tile:nth-child(3) {
+  background-color: rgb(239, 83, 80);
+  height: 15vw;
+  width: 14vw;
+  left: 15%;
+  top: 32%;
+}
+
+.tile:nth-child(4) {
+  background-color: rgb(102, 187, 106);
+  height: 12vw;
+  width: 10vw;
+  left: 42%;
+  top: 38%;
+}
+
+.tile:nth-child(5) {
+  background-color: rgb(171, 71, 188);
+  height: 14vw;
+  width: 28vw;
+  left: 12%;
+  top: 58%;
+}
+
+.tile:nth-child(6) {
+  background-color: rgb(255, 167, 38);
+  height: 20vw;
+  width: 20vw;
+  left: 60%;
+  top: 12%;
+}
+
+.tile:nth-child(7) {
+  background-color: rgb(63, 81, 181);
+  height: 14vw;
+  width: 18vw;
+  left: 48%;
+  top: 62%;
+}
+
+.tile:nth-child(8) {
+  background-color: rgb(141, 110, 99);
+  height: 20vw;
+  width: 16vw;
+  left: 68%;
+  top: 42%;
+}
+
+.tile:nth-child(9) {
+  background-color: rgb(250, 250, 250);
+  height: 8vw;
+  width: 6vw;
+  left: 78%;
+  top: 75%;
+}
+
+/* 반응형 갤러리 스타일 */
+@media screen and (max-width: 1600px) {
+  #gallery {
+    height: 110vh;
+    width: 110vw;
+  }
+  
+  .tile {
+    border-radius: 2vw;
+  }
+  
+  .tile:nth-child(1) {
+    height: 10vw;
+    width: 16vw;
+  }
+  
+  .tile:nth-child(2) {
+    height: 18vw;
+    width: 11vw;
+  }
+  
+  .tile:nth-child(3) {
+    height: 13vw;
+    width: 12vw;
+  }
+  
+  .tile:nth-child(4) {
+    height: 10vw;
+    width: 9vw;
+  }
+  
+  .tile:nth-child(5) {
+    height: 12vw;
+    width: 25vw;
+  }
+  
+  .tile:nth-child(6) {
+    height: 18vw;
+    width: 18vw;
+  }
+  
+  .tile:nth-child(7) {
+    height: 12vw;
+    width: 16vw;
+  }
+  
+  .tile:nth-child(8) {
+    height: 18vw;
+    width: 14vw;
+  }
+  
+  .tile:nth-child(9) {
+    height: 7vw;
+    width: 5vw;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  #gallery {
+    height: 100vh;
+    width: 100vw;
+  }
+  
+  .tile {
+    border-radius: 2.5vw;
+  }
+  
+  .tile:nth-child(1) {
+    height: 8vw;
+    width: 14vw;
+    left: 10%;
+    top: 12%;
+  }
+  
+  .tile:nth-child(2) {
+    height: 16vw;
+    width: 10vw;
+    left: 35%;
+    top: 8%;
+  }
+  
+  .tile:nth-child(3) {
+    height: 11vw;
+    width: 10vw;
+    left: 18%;
+    top: 35%;
+  }
+  
+  .tile:nth-child(4) {
+    height: 8vw;
+    width: 8vw;
+    left: 40%;
+    top: 40%;
+  }
+  
+  .tile:nth-child(5) {
+    height: 10vw;
+    width: 22vw;
+    left: 15%;
+    top: 60%;
+  }
+  
+  .tile:nth-child(6) {
+    height: 16vw;
+    width: 16vw;
+    left: 55%;
+    top: 15%;
+  }
+  
+  .tile:nth-child(7) {
+    height: 10vw;
+    width: 14vw;
+    left: 45%;
+    top: 65%;
+  }
+  
+  .tile:nth-child(8) {
+    height: 16vw;
+    width: 12vw;
+    left: 65%;
+    top: 45%;
+  }
+  
+  .tile:nth-child(9) {
+    height: 6vw;
+    width: 4vw;
+    left: 75%;
+    top: 78%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  #gallery {
+    height: 90vh;
+    width: 90vw;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  
+  .tile {
+    border-radius: 8px;
+    min-width: 60px;
+    min-height: 45px;
+  }
+  
+  .tile:nth-child(1) {
+    height: 60px;
+    width: 100px;
+    left: 12%;
+    top: 15%;
+  }
+  
+  .tile:nth-child(2) {
+    height: 120px;
+    width: 70px;
+    left: 32%;
+    top: 10%;
+  }
+  
+  .tile:nth-child(3) {
+    height: 80px;
+    width: 75px;
+    left: 20%;
+    top: 38%;
+  }
+  
+  .tile:nth-child(4) {
+    height: 60px;
+    width: 55px;
+    left: 38%;
+    top: 45%;
+  }
+  
+  .tile:nth-child(5) {
+    height: 75px;
+    width: 160px;
+    left: 18%;
+    top: 65%;
+  }
+  
+  .tile:nth-child(6) {
+    height: 120px;
+    width: 115px;
+    left: 52%;
+    top: 18%;
+  }
+  
+  .tile:nth-child(7) {
+    height: 75px;
+    width: 100px;
+    left: 42%;
+    top: 70%;
+  }
+  
+  .tile:nth-child(8) {
+    height: 120px;
+    width: 85px;
+    left: 62%;
+    top: 50%;
+  }
+  
+  .tile:nth-child(9) {
+    height: 45px;
+    width: 30px;
+    left: 72%;
+    top: 82%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  #gallery {
+    height: 80vh;
+    width: 85vw;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  
+  .tile:nth-child(1) {
+    height: 50px;
+    width: 80px;
+    left: 15%;
+    top: 18%;
+  }
+  
+  .tile:nth-child(2) {
+    height: 100px;
+    width: 60px;
+    left: 30%;
+    top: 12%;
+  }
+  
+  .tile:nth-child(3) {
+    height: 65px;
+    width: 60px;
+    left: 22%;
+    top: 42%;
+  }
+  
+  .tile:nth-child(4) {
+    height: 50px;
+    width: 45px;
+    left: 35%;
+    top: 48%;
+  }
+  
+  .tile:nth-child(5) {
+    height: 60px;
+    width: 130px;
+    left: 20%;
+    top: 68%;
+  }
+  
+  .tile:nth-child(6) {
+    height: 100px;
+    width: 95px;
+    left: 50%;
+    top: 20%;
+  }
+  
+  .tile:nth-child(7) {
+    height: 60px;
+    width: 85px;
+    left: 40%;
+    top: 72%;
+  }
+  
+  .tile:nth-child(8) {
+    height: 100px;
+    width: 70px;
+    left: 60%;
+    top: 52%;
+  }
+  
+  .tile:nth-child(9) {
+    height: 35px;
+    width: 25px;
+    left: 70%;
+    top: 85%;
+  }
+}
+
+/* -- YouTube Link Styles -- */
+
+#source-link {
+  bottom: 60px;
+}
+
+#source-link > i {
+  color: rgb(94, 106, 210);
+}
+
+#yt-link > i {
+  color: rgb(239, 83, 80);
+}
+
+.meta-link {
+  align-items: center;
+  backdrop-filter: blur(3px);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  bottom: 10px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;  
+  display: inline-flex;
+  gap: 5px;
+  left: 10px;
+  padding: 10px 20px;
+  position: fixed;
+  text-decoration: none;
+  transition: background-color 400ms, border-color 400ms;
+  z-index: 10000;
+}
+
+.meta-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.meta-link > i, .meta-link > span {
+  height: 20px;
+  line-height: 20px;
+}
+
+.meta-link > span {
+  color: white;
+  font-family: "Rubik", sans-serif;
+  font-weight: 500;
+}
+  </style>
+</head>
+<body>
+    <div class="pages">
+        <div class="first page">
+            <img src="자료/main.png" alt="중앙 이미지" class="center-image">
+        </div>
+        <div class="second page">
+          <div class="nav-arrow" data-page="3" data-href="sumak.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </div>
+            <div class="image-container">
+                <img src="자료/수막새/Group15.png" alt="이미지 1" class="stack-image">
+                <img src="자료/수막새/Group16.png" alt="이미지 2" class="stack-image">
+                <img src="자료/수막새/Group17.png" alt="이미지 3" class="stack-image">
+                <img src="자료/수막새/Group18.png" alt="이미지 4" class="stack-image">
+            </div>
+        </div>
+        <div class="third page">
+          <div class="nav-arrow" data-page="4" data-href="test.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </div>
+          <div class="third-page-layout">
+            <div class="right-column">
+              <img src="자료/공예품/1.png" alt="이미지 1" class="stack-image image2">
+              <img src="자료/공예품/44.png" alt="이미지 2" class="stack-image image3">
+              <img src="자료/공예품/2.png" alt="이미지 3" class="stack-image image4">
+              <img src="자료/공예품/title2.png" alt="CRAFTS 텍스트" class="stack-image image5">
+            </div>
+          </div>
+        </div>
+        <div class="fourth page">
+          <div class="nav-arrow" data-page="5"  data-href="pen-export-JjdRpKm/dist/untitled-2.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </div>
+          <img src="자료/한복/hanbokk.png" alt="이미지 5" class="himage1">
+          <img src="자료/한복/hhh.png" alt="이미지 6" class="himage2">
+          <img src="자료/한복/hh.png" alt="이미지 7" class="himage3">
+        </div>
+        <div class="fifth page">
+          <div id="gallery">
+            <div class="tile">
+              <img src="https://images.unsplash.com/photo-1481349518771-20055b2a7b24?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjF8fHJhbmRvbSUyMG9iamVjdHN8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=70" />
+            </div>
+            <div class="tile">
+              <img src="https://images.unsplash.com/photo-1515266591878-f93e32bc5937?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTF8fGJsdWV8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=70" />
+            </div>
+            <div class="tile">
+              <img src="https://images.unsplash.com/photo-1587590227264-0ac64ce63ce8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cmFuZG9tJTIwb2JqZWN0c3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=70" />
+            </div>
+            <div class="tile">
+              <img src="https://images.unsplash.com/photo-1520121401995-928cd50d4e27?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8Z3JlZW58ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=70" />
+            </div>
+            <div class="tile">
+              <img src="https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NXx8cHVycGxlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=70" />
+            </div>
+            <div class="tile">
+              <img src="https://images.unsplash.com/photo-1557800636-894a64c1696f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8b3JhbmdlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=70" />
+            </div>
+            <div class="tile">
+              <img src="https://images.unsplash.com/photo-1520338258525-606b90f95b04?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fGRhcmslMjBibHVlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=70" />
+            </div>
+            <div class="tile">
+              <img src="https://images.unsplash.com/photo-1521127474489-d524412fd439?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTh8fHJhbmRvbSUyMG9iamVjdHN8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=70" />
+            </div>
+            <div class="tile">
+              <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OXx8cmFuZG9tJTIwb2JqZWN0c3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=800&q=70" />
+            </div>
+          </div>
+
+
+        </div>
+    </div>
+    <!-- 페이징 -->
+    <ul class="pagination">
+    </ul>
+</body>
+<script>
+window.onload = () => {
+  // 이미지 순차적으로 나타나게 하는 함수
+  function animateStackImages(pageIndex) {
+    const page = document.querySelectorAll('.page')[pageIndex];
+    const images = page.querySelectorAll('.stack-image');
+    
+    // 먼저 모든 이미지의 visible 클래스를 제거
+    images.forEach(img => {
+      img.classList.remove('visible', 'c-visible');
+    });
+    
+    if (pageIndex === 2) { // third 페이지
+      const title = page.querySelector('.image5'); // title.png
+      const img1 = page.querySelector('.image2');  // 1.png
+      const img2 = page.querySelector('.image3');  // 44.png
+      const img3 = page.querySelector('.image4');  // 2.png
+
+      setTimeout(() => title.classList.add('visible'), 0);
+      setTimeout(() => img1.classList.add('visible'), 600);
+      setTimeout(() => img2.classList.add('visible'), 1200);
+      setTimeout(() => img3.classList.add('visible'), 1800);
+    } else {
+      // 다른 페이지는 기존 방식대로 순차 등장
+      images.forEach((img, index) => {
+        setTimeout(() => {
+          img.classList.add('visible');
+        }, index * 300);
+      });
+    }
+    
+    // 만약 5번째 페이지라면, 갤러리 애니메이션 초기화
+    if (pageIndex === 4) {
+      initGallery();
+    }
+  }
+  
+  // 갤러리 초기화 함수
+  function initGallery() {
+    const gallery = document.getElementById("gallery");
+    
+    // 이미지들을 점진적으로 나타나게 하기
+    const tiles = gallery.querySelectorAll('.tile');
+    tiles.forEach((tile, index) => {
+      setTimeout(() => {
+        const img = tile.querySelector('img');
+        if (img) {
+          img.style.opacity = '1';
+        }
+      }, index * 200);
+    });
+    
+    // 마우스 움직임에 따른 갤러리 패닝 (반응형 개선)
+    let isMouseMoving = false;
+    
+    window.onmousemove = e => {
+      if (!isMouseMoving) {
+        isMouseMoving = true;
+        requestAnimationFrame(() => {
+          const mouseX = e.clientX,
+                mouseY = e.clientY;
+          
+          const xDecimal = mouseX / window.innerWidth,
+                yDecimal = mouseY / window.innerHeight;
+          
+          // 화면 크기에 따라 패닝 범위 조정
+          const screenWidth = window.innerWidth;
+          let panMultiplier = 1;
+          
+          if (screenWidth <= 480) {
+            panMultiplier = 0.3;
+          } else if (screenWidth <= 768) {
+            panMultiplier = 0.5;
+          } else if (screenWidth <= 1200) {
+            panMultiplier = 0.7;
+          } else if (screenWidth <= 1600) {
+            panMultiplier = 0.8;
+          }
+          
+          const maxX = (gallery.offsetWidth - window.innerWidth) * panMultiplier,
+                maxY = (gallery.offsetHeight - window.innerHeight) * panMultiplier;
+          
+          const panX = Math.max(-maxX, Math.min(0, maxX * xDecimal * -1)),
+                panY = Math.max(-maxY, Math.min(0, maxY * yDecimal * -1));
+          
+          gallery.animate({
+            transform: `translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px))`
+          }, {
+            duration: 3000,
+            fill: "forwards",
+            easing: "ease-out"
+          });
+          
+          isMouseMoving = false;
+        });
+      }
+    };
+    
+    // 터치 이벤트 지원 (모바일)
+    let touchStartX = 0;
+    let touchStartY = 0;
+    
+    gallery.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    });
+    
+    gallery.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const touchX = e.touches[0].clientX;
+      const touchY = e.touches[0].clientY;
+      
+      const deltaX = (touchX - touchStartX) * 2;
+      const deltaY = (touchY - touchStartY) * 2;
+      
+      gallery.style.transform = `translate(calc(-50% + ${deltaX}px), calc(-50% + ${deltaY}px))`;
+    });
+  }
+  
+  const navArrows = document.querySelectorAll('.nav-arrow');
+  navArrows.forEach(arrow => {
+    arrow.addEventListener('click', function() {
+      if (this.dataset.href) {
+        window.location.href = this.dataset.href;
+      } else {
+        // Your existing page navigation logic
+      }
+    });
+  });
+
+  const Slider = function(pages, pagination) {
+    let slides = [],
+        btns = [],
+        count = 0,
+        current = 0,
+        touchstart = 0,
+        animation_state = false;
+
+    const init = () => {
+      slides = pages.children;
+      count = slides.length;
+      for(let i = 0; i < count; i++) {
+        slides[i].style.bottom = -(i * 100) + '%';
+        let btn = document.createElement('li');
+        btn.dataset.slide = i;
+        btn.addEventListener('click', btnClick)
+        btns.push(btn);
+        pagination.appendChild(btn);
+      }
+      btns[0].classList.add('active');
+    }
+
+    const gotoNum = (index) => {
+      if((index != current) && !animation_state) {
+        animation_state = true;
+        setTimeout(() => animation_state = false, 500);
+        btns[current].classList.remove('active');
+        current = index;
+        btns[current].classList.add('active');
+        for(let i = 0; i < count; i++) {
+          slides[i].style.bottom = (current - i) * 100 + '%';
+        }
+        
+        // 페이지 이동 후 애니메이션 시작 (모든 페이지에 대해 애니메이션 적용)
+        setTimeout(() => animateStackImages(current), 700); // 페이지 전환 애니메이션 후 실행
+      }
+    }
+
+    const gotoNext = () => current < count - 1 ? gotoNum(current + 1) : false;
+    const gotoPrev = () => current > 0 ? gotoNum(current - 1) : false;
+    const btnClick = (e) => gotoNum(parseInt(e.target.dataset.slide));
+    pages.ontouchstart = (e) => touchstart = e.touches[0].screenY;
+    pages.ontouchend = (e) => touchstart < e.changedTouches[0].screenY ? gotoPrev() : gotoNext();
+    pages.onmousewheel = pages.onwheel = (e) => e.deltaY < 0 ? gotoPrev() : gotoNext();
+
+    init();
+  }
+
+  let pages = document.querySelector('.pages');
+  let pagination = document.querySelector('.pagination');
+  let slider = new Slider(pages, pagination);
+}
+</script>
+</html>
